@@ -1,14 +1,29 @@
-import { MongoClient } from "mongodb";
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-const client = new MongoClient(process.env.ATLAS_URI);
+// Load environment variables from the .env file
+dotenv.config();
 
-let conn;
-try {
-  conn = await client.connect();
-} catch (e) {
-  console.error(e);
+// Ensure the MongoDB URI is available from environment variables
+const uri = process.env.ATLAS_URI;
+
+if (!uri) {
+  throw new Error('MongoDB connection URI is not defined in environment variables.');
 }
 
-let db = conn.db("sample_training");
+// Define the connect function
+export default function connect() {
+  // Connect to MongoDB using Mongoose
+  mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+    .then(() => {
+      console.log('MongoDB connected successfully.');
+    })
+    .catch((error) => {
+      console.error('Error connecting to MongoDB:', error);
+      process.exit(1);  
+    });
+}
 
-export default db;
