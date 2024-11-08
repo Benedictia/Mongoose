@@ -1,29 +1,41 @@
-import express from "express";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import connect from './db/conn.mjs'; // Or just use mongoose if you don't need custom connect logic
+
 dotenv.config();
 
-const PORT = 5050;
-const app = express();
+const app = express(); // Create an Express app
 
-import grades from "./routes/grades.mjs";
-import grades_agg from "./routes/grades_agg.mjs";
+// Ensure the MongoDB URI is available
+const uri = process.env.ATLAS_URI;
+if (!uri) {
+  throw new Error('MongoDB connection URI is not defined in environment variables.');
+}
 
-app.use(express.json());
+// Connect to MongoDB using Mongoose
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => {
+    console.log('MongoDB connected successfully.');
+    connect(); // Call your custom connect function, if necessary
+  })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB:', error);
+    process.exit(1);
+  });
 
-app.get("/", (req, res) => {
-  res.send("Welcome to the API.");
+// Define a port (default is 3000)
+const port = process.env.PORT || 5050;
+
+// Set up a basic route
+app.get('/', (req, res) => {
+  res.send('Hello, world!');
 });
 
-app.use("/grades", grades);
-app.use("/grades", grades_agg);
-
-// Global error handling
-app.use((err, _req, res, next) => {
-  res.status(500).send("Seems like we messed up somewhere...");
-});
-
-// Start the Express server
-app.listen(PORT, () => {
-  console.log(`Server is running on port: ${PORT}`);
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
