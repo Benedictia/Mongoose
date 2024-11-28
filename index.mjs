@@ -1,11 +1,11 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import connect from './db/conn.mjs'; // Or just use mongoose if you don't need custom connect logic
+import connect from './db/conn.mjs'; 
 
 dotenv.config();
 
-const app = express(); // Create an Express app
+const app = express(); 
 
 // Ensure the MongoDB URI is available
 const uri = process.env.ATLAS_URI;
