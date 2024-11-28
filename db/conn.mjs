@@ -1,10 +1,8 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
-// Load environment variables from the .env file
-dotenv.config();
 
-// Ensure the MongoDB URI is available from environment variables
+dotenv.config();
 const uri = process.env.ATLAS_URI;
 
 if (!uri) {
@@ -13,7 +11,7 @@ if (!uri) {
 
 // Define the connect function
 export default function connect() {
-  // Connect to MongoDB using Mongoose
+  
   mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
