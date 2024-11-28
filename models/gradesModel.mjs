@@ -1,5 +1,5 @@
 import express from "express";
-import Grade from "../models/Grade.mjs";  // Import Mongoose model for 'grades'
+import Grade from "../models/Grade.mjs";  
 
 const router = express.Router();
 
@@ -39,7 +39,7 @@ router.patch("/:id/add", async (req, res) => {
     const grade = await Grade.findById(req.params.id);
     if (!grade) return res.status(404).send("Grade not found");
 
-    grade.scores.push(req.body.score);  // Assuming req.body.score contains the score to be added
+    grade.scores.push(req.body.score);  
     await grade.save();
     res.status(200).send(grade);
   } catch (err) {
@@ -55,7 +55,7 @@ router.patch("/:id/remove", async (req, res) => {
 
     const index = grade.scores.indexOf(req.body.score);
     if (index > -1) {
-      grade.scores.splice(index, 1);  // Remove the score from the array
+      grade.scores.splice(index, 1);  
       await grade.save();
       res.status(200).send(grade);
     } else {
